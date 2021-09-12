@@ -292,17 +292,34 @@ type Provider interface {
 	GC()
 }
 
-var providers = make(map[string]Provider)
+var providers = make(map[string]func() Provider)
 
 // Register registers a provider.
 func Register(name string, provider Provider) {
-	if provider == nil {
+	if reflect.TypeOf(provider).Kind() == reflect.Ptr {
+		// Pointer:
+		RegisterFn(name, func() Provider {
+			return reflect.New(reflect.ValueOf(provider).Elem().Type()).Interface().(Provider)
+		})
+		return
+	}
+
+	// Not a Pointer
+	RegisterFn(name, func() Provider {
+		return reflect.New(reflect.TypeOf(provider)).Elem().Interface().(Provider)
+	})
+}
+
+// RegisterFn registers a provider function.
+func RegisterFn(name string, providerfn func() Provider) {
+	if providerfn == nil {
 		panic("session: cannot register provider with nil value")
 	}
 	if _, dup := providers[name]; dup {
 		panic(fmt.Errorf("session: cannot register provider '%s' twice", name))
 	}
-	providers[name] = provider
+
+	providers[name] = providerfn
 }
 
 //    _____
@@ -321,25 +338,14 @@ type Manager struct {
 // NewManager creates and returns a new session manager by given provider name and configuration.
 // It returns an error when requested provider name isn't registered.
 func NewManager(name string, opt Options) (*Manager, error) {
-	exemplar, ok := providers[name]
+	fn, ok := providers[name]
 	if !ok {
 		return nil, fmt.Errorf("session: unknown provider '%s'(forgotten import?)", name)
 	}
 
-	p := newProvider(exemplar)
+	p := fn()
 
 	return &Manager{p, opt}, p.Init(opt.Maxlifetime, opt.ProviderConfig)
-}
-
-func newProvider(exemplar Provider) Provider {
-	// Check the underlying type of the exemplar provider
-	if reflect.TypeOf(exemplar).Kind() == reflect.Ptr {
-		// If it is a pointer:
-		return reflect.New(reflect.ValueOf(exemplar).Elem().Type()).Interface().(Provider)
-	}
-
-	// Not a Pointer
-	return reflect.New(reflect.TypeOf(exemplar)).Elem().Interface().(Provider)
 }
 
 // sessionID generates a new session ID with rand string, unix nano time, remote addr by hash function.
