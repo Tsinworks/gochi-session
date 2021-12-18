@@ -71,20 +71,31 @@ func testProvider(opt Options) {
 	Convey("Basic operation", func() {
 		c := chi.NewRouter()
 		c.Use(Sessioner(opt))
+		var initialSid string
 
 		c.Get("/", func(resp http.ResponseWriter, req *http.Request) {
 			sess := GetSession(req)
 			sess.Set("uname", "unknwon")
+			initialSid = sess.ID()
 		})
 		c.Get("/reg", func(resp http.ResponseWriter, req *http.Request) {
 			sess := GetSession(req)
-			raw, err := sess.RegenerateID(resp, req)
+			So(initialSid, ShouldEqual, sess.ID())
+			raw, err := RegenerateSession(resp, req)
 			So(err, ShouldBeNil)
-			So(raw, ShouldNotBeNil)
+			So(sess, ShouldNotBeNil)
+			So(sess, ShouldEqual, raw)
 
-			uname := raw.Get("uname")
+			So(initialSid, ShouldNotEqual, sess.ID())
+
+			uname := sess.Get("uname")
 			So(uname, ShouldNotBeNil)
 			So(uname, ShouldEqual, "unknwon")
+
+			sess.Set("uname", "lunny")
+			uname = sess.Get("uname")
+			So(uname, ShouldNotBeNil)
+			So(uname, ShouldEqual, "lunny")
 		})
 		c.Get("/get", func(resp http.ResponseWriter, req *http.Request) {
 			sess := GetSession(req)
@@ -97,7 +108,7 @@ func testProvider(opt Options) {
 
 			uname := sess.Get("uname")
 			So(uname, ShouldNotBeNil)
-			So(uname, ShouldEqual, "unknwon")
+			So(uname, ShouldEqual, "lunny")
 
 			So(sess.Delete("uname"), ShouldBeNil)
 			So(sess.Get("uname"), ShouldBeNil)
