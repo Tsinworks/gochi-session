@@ -17,6 +17,7 @@ package session
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -165,7 +166,11 @@ func (p *FileProvider) Read(sid string) (_ RawStore, err error) {
 	} else {
 		kv, err = DecodeGob(data)
 		if err != nil {
-			return nil, err
+			if err != io.EOF {
+				return nil, err
+			}
+			// the session file has been truncated and is now invalid - therefore all session data is lost
+			kv = make(map[interface{}]interface{})
 		}
 	}
 	return NewFileStore(p, sid, kv), nil
