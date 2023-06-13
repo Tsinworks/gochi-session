@@ -448,8 +448,11 @@ func (m *Manager) Destroy(resp http.ResponseWriter, req *http.Request) error {
 	}
 	cookie := &http.Cookie{
 		Name:     m.opt.CookieName,
+		Domain:   m.opt.Domain,
 		Path:     m.opt.CookiePath,
 		HttpOnly: true,
+		Secure:   m.opt.Secure,
+		SameSite: m.opt.SameSite,
 		Expires:  time.Now(),
 		MaxAge:   -1,
 	}
