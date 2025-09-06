@@ -20,7 +20,7 @@ import (
 	"testing"
 	"time"
 
-	"gitea.com/go-chi/session"
+	"github.com/Tsinworks/gochi-session"
 	chi "github.com/go-chi/chi/v5"
 	. "github.com/smartystreets/goconvey/convey"
 )

@@ -22,7 +22,7 @@ import (
 	"sync"
 	"time"
 
-	"gitea.com/go-chi/session"
+	"github.com/Tsinworks/gochi-session"
 	_ "github.com/go-sql-driver/mysql"
 )
 

@@ -5,7 +5,7 @@ Middleware session provides session management which based on a [fork](https://g
 ## Installation
 
 ```
-go get gitea.com/go-chi/session
+go get github.com/Tsinworks/gochi-session
 ```
 
 ## Credits

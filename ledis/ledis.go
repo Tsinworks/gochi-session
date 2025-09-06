@@ -20,7 +20,7 @@ import (
 	"strings"
 	"sync"
 
-	"gitea.com/go-chi/session"
+	"github.com/Tsinworks/gochi-session"
 	"github.com/siddontang/ledisdb/config"
 	"github.com/siddontang/ledisdb/ledis"
 	"github.com/unknwon/com"

@@ -22,7 +22,7 @@ import (
 	"sync"
 	"time"
 
-	"gitea.com/go-chi/session"
+	"github.com/Tsinworks/gochi-session"
 	"github.com/go-redis/redis/v8"
 	"github.com/unknwon/com"
 	"gopkg.in/ini.v1"

@@ -1,4 +1,4 @@
-module gitea.com/go-chi/session
+module github.com/Tsinworks/gochi-session
 
 go 1.21
 

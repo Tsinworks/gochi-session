@@ -19,7 +19,7 @@ import (
 	"strings"
 	"sync"
 
-	"gitea.com/go-chi/session"
+	"github.com/Tsinworks/gochi-session"
 	"github.com/couchbase/go-couchbase"
 )
 
