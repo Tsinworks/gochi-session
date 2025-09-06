@@ -12,6 +12,7 @@ require (
 	github.com/siddontang/ledisdb v0.0.0-20190202134119-8ceb77e66a92
 	github.com/smartystreets/goconvey v0.0.0-20190731233626-505e41936337
 	github.com/unknwon/com v1.0.1
+	github.com/vmihailenco/msgpack/v5 v5.4.1
 	gopkg.in/ini.v1 v1.62.0
 )
 
@@ -31,6 +32,7 @@ require (
 	github.com/siddontang/rdb v0.0.0-20150307021120-fc89ed2e418d // indirect
 	github.com/smartystreets/assertions v0.0.0-20190116191733-b6c0e53d7304 // indirect
 	github.com/syndtr/goleveldb v1.0.0 // indirect
+	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	go.opentelemetry.io/otel v0.14.0 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/net v0.0.0-20201006153459-a7d1128ccaa0 // indirect

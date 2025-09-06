@@ -18,37 +18,22 @@ package session
 import (
 	"bytes"
 	"crypto/rand"
-	"encoding/gob"
 	"io"
 
 	"github.com/unknwon/com"
+	"github.com/vmihailenco/msgpack/v5"
 )
 
-func init() {
-	gob.Register([]interface{}{})
-	gob.Register(map[int]interface{}{})
-	gob.Register(map[string]interface{}{})
-	gob.Register(map[interface{}]interface{}{})
-	gob.Register(map[string]string{})
-	gob.Register(map[int]string{})
-	gob.Register(map[int]int{})
-	gob.Register(map[int]int64{})
+// MessagePack doesn't require type registration like gob
+
+// Encode encodes obj with MessagePack
+func Encode(obj map[interface{}]interface{}) ([]byte, error) {
+	return msgpack.Marshal(obj)
 }
 
-// EncodeGob encodes obj with gob
-func EncodeGob(obj map[interface{}]interface{}) ([]byte, error) {
-	for _, v := range obj {
-		gob.Register(v)
-	}
-	buf := bytes.NewBuffer(nil)
-	err := gob.NewEncoder(buf).Encode(obj)
-	return buf.Bytes(), err
-}
-
-// DecodeGob decodes bytes to obj
-func DecodeGob(encoded []byte) (out map[interface{}]interface{}, err error) {
-	buf := bytes.NewBuffer(encoded)
-	err = gob.NewDecoder(buf).Decode(&out)
+// Decode decodes bytes to obj
+func Decode(encoded []byte) (out map[interface{}]interface{}, err error) {
+	out, err = msgpack.NewDecoder(bytes.NewReader(encoded)).DecodeUntypedMap()
 	return out, err
 }
 

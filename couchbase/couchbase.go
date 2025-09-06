@@ -72,7 +72,7 @@ func (s *CouchbaseSessionStore) Release() error {
 		return nil
 	}
 
-	data, err := session.EncodeGob(s.data)
+	data, err := session.Encode(s.data)
 	if err != nil {
 		return err
 	}
@@ -147,7 +147,7 @@ func (p *CouchbaseProvider) Read(sid string) (session.RawStore, error) {
 	if doc == nil {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = session.DecodeGob(doc)
+		kv, err = session.Decode(doc)
 		if err != nil {
 			return nil, err
 		}
@@ -203,7 +203,7 @@ func (p *CouchbaseProvider) Regenerate(oldsid, sid string) (session.RawStore, er
 	if doc == nil {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = session.DecodeGob(doc)
+		kv, err = session.Decode(doc)
 		if err != nil {
 			return nil, err
 		}

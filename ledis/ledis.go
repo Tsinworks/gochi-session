@@ -84,7 +84,7 @@ func (s *LedisStore) Release() error {
 		return nil
 	}
 
-	data, err := session.EncodeGob(s.data)
+	data, err := session.Encode(s.data)
 	if err != nil {
 		return err
 	}
@@ -158,7 +158,7 @@ func (p *LedisProvider) Read(sid string) (session.RawStore, error) {
 	if len(kvs) == 0 {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = session.DecodeGob(kvs)
+		kv, err = session.Decode(kvs)
 		if err != nil {
 			return nil, err
 		}
@@ -201,7 +201,7 @@ func (p *LedisProvider) Regenerate(oldsid, sid string) (_ session.RawStore, err 
 	if len(kvs) == 0 {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = session.DecodeGob([]byte(kvs))
+		kv, err = session.Decode([]byte(kvs))
 		if err != nil {
 			return nil, err
 		}

@@ -81,7 +81,7 @@ func (s *MysqlStore) Release() error {
 		return nil
 	}
 
-	data, err := session.EncodeGob(s.data)
+	data, err := session.Encode(s.data)
 	if err != nil {
 		return err
 	}
@@ -136,7 +136,7 @@ func (p *MysqlProvider) Read(sid string) (session.RawStore, error) {
 	if len(data) == 0 || expiry+p.expire <= now {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = session.DecodeGob(data)
+		kv, err = session.Decode(data)
 		if err != nil {
 			return nil, err
 		}

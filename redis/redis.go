@@ -89,7 +89,7 @@ func (s *RedisStore) Release() error {
 		return nil
 	}
 
-	data, err := session.EncodeGob(s.data)
+	data, err := session.Encode(s.data)
 	if err != nil {
 		return err
 	}
@@ -174,7 +174,7 @@ func (p *RedisProvider) Read(sid string) (session.RawStore, error) {
 	if len(kvs) == 0 {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = session.DecodeGob([]byte(kvs))
+		kv, err = session.Decode([]byte(kvs))
 		if err != nil {
 			return nil, err
 		}
@@ -221,7 +221,7 @@ func (p *RedisProvider) Regenerate(oldsid, sid string) (_ session.RawStore, err 
 	if len(kvs) == 0 {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = session.DecodeGob([]byte(kvs))
+		kv, err = session.Decode([]byte(kvs))
 		if err != nil {
 			return nil, err
 		}

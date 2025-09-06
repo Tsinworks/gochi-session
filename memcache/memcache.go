@@ -89,7 +89,7 @@ func (s *MemcacheStore) Release() error {
 		return nil
 	}
 
-	data, err := session.EncodeGob(s.data)
+	data, err := session.Encode(s.data)
 	if err != nil {
 		return err
 	}
@@ -136,7 +136,7 @@ func (p *MemcacheProvider) Read(sid string) (session.RawStore, error) {
 	if len(item.Value) == 0 {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = session.DecodeGob(item.Value)
+		kv, err = session.Decode(item.Value)
 		if err != nil {
 			return nil, err
 		}
@@ -180,7 +180,7 @@ func (p *MemcacheProvider) Regenerate(oldsid, sid string) (_ session.RawStore, e
 	if len(item.Value) == 0 {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = session.DecodeGob(item.Value)
+		kv, err = session.Decode(item.Value)
 		if err != nil {
 			return nil, err
 		}

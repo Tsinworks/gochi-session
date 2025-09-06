@@ -87,7 +87,7 @@ func (s *FileStore) Release() error {
 		return nil
 	}
 
-	data, err := EncodeGob(s.data)
+	data, err := Encode(s.data)
 	if err != nil {
 		return err
 	}
@@ -164,7 +164,7 @@ func (p *FileProvider) Read(sid string) (_ RawStore, err error) {
 	if len(data) == 0 {
 		kv = make(map[interface{}]interface{})
 	} else {
-		kv, err = DecodeGob(data)
+		kv, err = Decode(data)
 		if err != nil {
 			if err != io.EOF {
 				return nil, err
@@ -201,7 +201,7 @@ func (p *FileProvider) regenerate(oldsid, sid string) (err error) {
 
 	oldname := p.filepath(oldsid)
 	if !com.IsFile(oldname) {
-		data, err := EncodeGob(make(map[interface{}]interface{}))
+		data, err := Encode(make(map[interface{}]interface{}))
 		if err != nil {
 			return err
 		}
